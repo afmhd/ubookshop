@@ -13,72 +13,116 @@ import { Block } from './Block';
 
 
 export default p => Component(p, Page);
-const Page: PageEl = (props, state, refresh, getProps) => {
+const Page: PageEl = (props, state:
+  {
+    form:string,
+    book:{
+      title:string, author:string, country:string, imageLink:string,
+      price:number, language:string,pages:number,
+    
+    },
+    cart:Array<string>
+  }, refresh, getProps) => {
 
   let styles = global.styles
-  let name = "خوش آمدید"
+  let name = "books"
+
+  let total_price = 0
+
+ 
+    if(!state.cart)
+    {
+        state.cart = []
+    }
+    console.log("renderes:",state.cart)
+    for(let title of state.cart) {
+    let book = props.books.find(b=> b.title==title)
+    if (book)
+    {
+      total_price +=( book.price *0.8)
+    }
+   
+  
+}
+
+
 
 
 
 
   return (
-    <div style={{ direction: "rtl", minHeight: "11vh", }}>
+    <div style={{ direction: "ltr", minHeight: "11vh", }}>
       <br-x />
 
       {state.form == "bookspecs" ? <WindowFloat
-        title="مشخصات کتاب" onclose={() => {
+        title="books specifications :" onclose={() => {
           delete state.form
           refresh()
         }}>
 
 
         <f-c>
-          <f-15>نام کتاب: </f-15>
+          <f-15>name :  </f-15>
           <sp-2 />
           <f-15>{state.book.title}</f-15>
         </f-c>
 
         <f-c>
-          <f-15>نویسنده: </f-15>
+          <f-15> author :  </f-15>
           <sp-2 />
           <f-15>{state.book.author}</f-15>
         </f-c>
 
         <f-c>
-          <f-15>کشور: </f-15>
+          <f-15>country :  </f-15>
           <sp-2 />
           <f-15>{state.book.country}</f-15>
         </f-c>
 
         <f-c>
-          <f-15>زبان: </f-15>
+          <f-15>language : </f-15>
           <sp-2 />
           <f-15>{state.book.language}</f-15>
         </f-c>
 
         <f-c>
-          <f-15>صفحات: </f-15>
+          <f-15>pages : </f-15>
           <sp-2 />
-          <f-15>{(state.book.pages as number).toLocaleString("fa-IR")}</f-15>
+          <f-15>{(state.book.pages as number)}</f-15>
         </f-c>
 
-        <g-b style={{backgroundColor: "#717774"}} onClick={()=>{
-          if(!state.faves)
+        <g-b style={{backgroundColor:
+        state.cart.includes(state.book.title)?"#D38D31": "#7DB3DE"}}
+         onClick={()=>{
+
+          if(state.cart.includes(state.book.title))
           {
-            state.faves = []
+            state.cart=state.cart.filter(bookname=> state.book.title != bookname)
+            state.form = null
+            refresh()
+
           }
-          state.faves.push(state.book.title)
-          state.form = null
-          refresh()
+          else
+          {
+            state.cart.push(state.book.title)
+            state.form = null
+            refresh()
+          }
+  
+
         }}>
-          <img src="https://irmapserver.ir/research/0/heart.png"
-            style={{ height: 20, width: 20, objectFit: "contain"}} />
+         {state.cart.includes(state.book.title)?<f-13>Removing from wishlist</f-13>:<f-13>Adding to wishlist</f-13>}
         </g-b >
 
 
       </WindowFloat> : null}
 
-
+      <Window title=" The Wishlist"style={{height:60,margin:10, width: "100%"}}>
+        <f-cse style={{height:40, width: "100%"}}>
+          <f-14>Total Price : {total_price.toLocaleString("en-UK")}</f-14>
+          <f-14>number of books : {state.cart.length}</f-14>
+        </f-cse>
+      </Window>
       <Window title={name}
         style={{ minHeight: 200, margin: 10, width: "calc(100% - 20px)" }}>
         {/* <pre style={{ direction: "ltr" }}>{JSON.stringify(props, null, 2)}</pre>
