@@ -37,8 +37,8 @@ export const Block = props => {
 
             <f-csb style={{width: "100%",padding:"5 px 0"}}>
                 <img src={props.state.cart.includes(props.book.title)?
-                "https://irmapserver.ir/qepal/ok.svg":
-                "https://irmapserver.ir/research/34/vecteezy_christmas-tote-bag-3d-christmas-art-red-white_47530372.png"}
+                "https://cdn.turing.team/qepal/ok.svg":
+                "https://cdn.turing.team/research/34/vecteezy_christmas-tote-bag-3d-christmas-art-red-white_47530372.png"}
                 style={{height:size, width:size, objectFit:"contain",
                      margin:"0 10px"
                 }}/>
